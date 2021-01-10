@@ -1,0 +1,2 @@
+# Labyrinth
+Simple maze generator
