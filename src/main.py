@@ -10,12 +10,6 @@ DISPLAY = pygame.display.set_mode((display_width, display_height))
 WHITE = (255, 255, 255)
 DISPLAY.fill(WHITE)
 
-
-
-
-lab = labyrinth(DISPLAY,500,500,2)
-lab.draw()
-pygame.display.update()
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -24,7 +18,6 @@ while True:
         if event.type == pygame.MOUSEBUTTONUP:
             pos_x, pos_y = pygame.mouse.get_pos()
             if event.button == 1:
-                #lab.create_one()
-                pass
+                lab = labyrinth(DISPLAY,50,50,20, pygame.display)
             if event.button == 3:
                 pass

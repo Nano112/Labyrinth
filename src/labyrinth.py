@@ -3,12 +3,13 @@ import random
 
 class labyrinth:
 
-    def __init__(self, display, largeur, hauteur, taille_case):
+    def __init__(self, display, largeur, hauteur, taille_case,pygame_display):
         self.grid = [[tile(display, x * taille_case, y * taille_case, taille_case) for x in range(0, largeur)] for y in
                      range(0, hauteur)]
         self.largeur = largeur
         self.hauteur = hauteur
         self.display = display
+        self.pygame_display = pygame_display
 
         self.movements = []
         self.x = 0
@@ -23,15 +24,15 @@ class labyrinth:
         self.grid[y][x].viewed = self.grid[y][x].viewed + 1
         while self.grid[start_y][start_x].viewed < 2:
             direction = self.get_free_direction(x, y)
-
             if direction is not None:
-
                 self.grid[y][x].mur[direction] = False
-
                 x, y = self.move(x, y, direction)
                 self.grid[y][x].viewed = self.grid[y][x].viewed + 1
                 self.grid[y][x].mur[(direction + 2) % 4] = False
                 movements.append(direction)
+                direction = self.get_free_direction(x, y)
+                if direction is None:
+                    self.grid[y][x].viewed = self.grid[y][x].viewed + 1
             elif len(movements) != 0:
                 mov = movements.pop()
                 self.solved.append(mov)
@@ -39,8 +40,9 @@ class labyrinth:
                 self.grid[y][x].viewed = self.grid[y][x].viewed + 1
                 x, y = self.move(x, y, inv_dir)
                 self.grid[y][x].viewed = self.grid[y][x].viewed + 1
-
-
+            self.grid[y][x].draw()
+            self.pygame_display.update()
+        self.pygame_display.update()
 
     def create_one(self):
             direction = self.get_free_direction(self.x, self.y)
@@ -69,10 +71,10 @@ class labyrinth:
         if d == 3:
             return x, y + 1
 
-    # 0 = Gauche
-    # 1 = Haut
-    # 2 = Droite
-    # 3 = Bas
+    # 0 = Left
+    # 1 = Up
+    # 2 = Right
+    # 3 = Bottom
 
     def get_free_direction(self, index_x, index_y):
         direction = self.random_directions()
